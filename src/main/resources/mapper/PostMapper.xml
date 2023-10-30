@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.coflix.mapper.PostMapper">
+    <select id="selectPost" resultMap="postResultMap">
+        SELECT * FROM posts WHERE id = #{id}
+    </select>
+
+    <resultMap id="postResultMap" type="com.example.coflix.dto.Post">
+        <id column="id" property="id"/>
+        <collection property="comments" ofType="com.example.coflix.dto.Comment" select="selectCommentsByPostId" column="id"/>
+    </resultMap>
+
+    <resultMap id="commentResultMap" type="com.example.coflix.dto.Comment">
+        <id column="id" property="id"/>
+        <result column="post_id" property="postId"/>
+        <!-- 여기에 다른 컬럼과 프로퍼티 매핑을 추가하세요 -->
+    </resultMap>
+
+    <select id="selectCommentsByPostId" resultMap="commentResultMap">
+        SELECT * FROM comments WHERE post_id = #{id}
+    </select>
+</mapper>
